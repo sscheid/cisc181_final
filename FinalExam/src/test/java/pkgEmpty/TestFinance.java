@@ -14,15 +14,21 @@ public class TestFinance {
 	public void TestPV() {
 
 		int iYearsToWork = 40;
-		double dAnnualReturnWorking = 0.07;
+		double dAnnualReturnWorking = 7;
 		int iYearsRetired = 20;
-		double dAnnualReturnRetired = 0.02;
+		double dAnnualReturnRetired = 2;
 		double dRequiredIncome = 10000;
 		double dMonthlySSI = 2642;
 
-		double PV = Retirement.PV(dAnnualReturnRetired / 12, iYearsRetired * 12, dRequiredIncome - dMonthlySSI, 0, false);
+		double PV = Retirement.PV((dAnnualReturnRetired / 12)/100, iYearsRetired * 12, dRequiredIncome - dMonthlySSI, 0, false);
+		
+		Retirement r = new Retirement(iYearsToWork, dAnnualReturnWorking, iYearsRetired, dAnnualReturnRetired,
+				dRequiredIncome, dMonthlySSI);
+		
+		double pv = r.TotalAmountToSave();
 		
 		System.out.println(PV);
+		System.out.println(pv);
 		
 		//	In my calculations, in order to receive a payment of $7358 ($10000-2642), if you were making 2% on your return, and you wanted it paid off
 		//	over a 20 year period... You'd need to save $1,454,485.55.
@@ -31,13 +37,30 @@ public class TestFinance {
 		
 		//	I want to copmare a double with a double... Doubles are not precice... I have to give a rounding factor.
 		//	Note the third argument.  That says only compare the double values to the hundredth place.
-		assertEquals(1454485.55,Math.abs(PV),0.01);
+		assertEquals(Math.abs(pv),Math.abs(PV),0.01);
 		
 	}
 
 	@Test
 	public void TestPMT() {
 
-		//TODO: Test PMT.  Make sure PMT works as expected.
+		int iYearsToWork = 40;
+		double dAnnualReturnWorking = 7;
+		int iYearsRetired = 20;
+		double dAnnualReturnRetired = 2;
+		double dRequiredIncome = 10000;
+		double dMonthlySSI = 2642;
+		
+		Retirement r = new Retirement(iYearsToWork, dAnnualReturnWorking, iYearsRetired, dAnnualReturnRetired,
+				dRequiredIncome, dMonthlySSI);
+		
+		double PMT = Retirement.PMT((dAnnualReturnWorking / 12.0)/100, iYearsToWork * 12, 0, r.TotalAmountToSave(), false);
+		double pmt = r.MonthlySavings();
+		
+		System.out.println(PMT);
+		System.out.println(pmt);
+		
+		assertEquals(Math.abs(pmt),Math.abs(PMT),0.01);
+		
 	}
 }

@@ -23,18 +23,19 @@ public class Retirement {
 	}
 
 	public double MonthlySavings() {
-
-		//TODO: Calculate AmountToSave
-		double pmt = 0; // <-- this should be fixed to calculate the real pmt
-		return pmt;
+		
+		double pmt = Math.round(FinanceLib.pmt(((dAnnualReturnWorking)/12.0)/100, iYearsToWork*12.0, 0, this.TotalAmountToSave(), false)*100.0)/100.0;
+		
+		double abs_val_pmt = Math.abs(pmt);
+		return abs_val_pmt;
 	}
 
 	public double TotalAmountToSave() {
 		
-		//TODO: Calculate the Total Amount Requried to save
-		double pv = 0;
-		//	Hint: Here's how to round a number: pv = Math.round(pv * 100.0) / 100.0;
-		return pv;
+		double pv = Math.round(FinanceLib.pv(((dAnnualReturnRetired)/12)/100, iYearsRetired*12, (dRequiredIncome-dMonthlySSI), 0, false)*100.0)/100.0;
+		
+		double abs_val_pv = Math.abs(pv);
+		return abs_val_pv;
 	}
 
 	public static double PMT(double r, double n, double p, double f, boolean t) {

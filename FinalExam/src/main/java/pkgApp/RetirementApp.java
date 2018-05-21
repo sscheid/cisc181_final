@@ -2,6 +2,7 @@ package pkgApp;
 import pkgApp.controller.RetirementController;
 
 import java.io.IOException;
+import java.net.URL;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -26,7 +27,10 @@ public class RetirementApp extends Application {
 			FXMLLoader loader = new FXMLLoader();		
 			loader =  new FXMLLoader(getClass().getResource("/app/view/Retirement.fxml"));			 
 			BorderPane ClientServerOverview = (BorderPane) loader.load();
-			Scene scene = new Scene(ClientServerOverview);			
+			Scene scene = new Scene(ClientServerOverview);
+			URL url = this.getClass().getResource("application.css");
+		    String css = url.toExternalForm(); 
+		    scene.getStylesheets().add(css);
 			primaryStage.setScene(scene);
 			// Give the controller access to the main app.
 			RetirementController controller = loader.getController();			

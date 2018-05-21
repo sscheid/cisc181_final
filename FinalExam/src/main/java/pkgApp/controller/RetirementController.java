@@ -65,8 +65,13 @@ public class RetirementController implements Initializable {
 		// "\\d*?" - means any decimal number
 		// "\\d*(\\.\\d*)?" means any decimal, then optionally a period (.), then
 		// decmial
-		hmTextFieldRegEx.put(txtYearsToWork, "\\d*?");
-		hmTextFieldRegEx.put(txtAnnualReturnWorking, "\\d*(\\.\\d*)?");
+		
+		hmTextFieldRegEx.put(txtYearsToWork, "^([0-9]|([1-3][0-9])|40)$");
+		hmTextFieldRegEx.put(txtAnnualReturnWorking, "\\d?(\\.\\d*)?|10(\\.0*)?");
+		hmTextFieldRegEx.put(txtYearsRetired, "1?\\d|20");
+		hmTextFieldRegEx.put(txtAnnualReturnRetired, "\\d?(\\.\\d*)?|10(\\.0*)?");
+		hmTextFieldRegEx.put(txtRequiredIncome, "((264[2-9])|(26[5-9][0-9])|(2[7-9][0-9][0-9])|([3-9][0-9][0-9][0-9]))|10000");
+		hmTextFieldRegEx.put(txtMonthlySSI, "(1?\\d{1,3})|(2[0-5]\\d{2})|(26[0-3]\\d)|264[0-2]");
 
 		// Check out these pages (how to validate controls):
 		// https://stackoverflow.com/questions/30935279/javafx-input-validation-textfield
@@ -95,13 +100,6 @@ public class RetirementController implements Initializable {
 				}
 			});
 		}
-
-		//
-		// TODO: Validate Working Annual Return %, accept only numbers and decimals
-		// TODO: Validate Years retired, accepted only decimals
-		// TODO: Validate Retired Annual Return %, accept only numbers and deciamls
-		// TODO: Validate Required Income, accept only decimals
-		// TODO: Validate Monthly SSI, accept only decimals
 	}
 
 	@FXML
@@ -115,9 +113,21 @@ public class RetirementController implements Initializable {
 		// Clear, enable txtYearsToWork
 		txtYearsToWork.clear();
 		txtYearsToWork.setDisable(false);
-
-		// TODO: Clear, enable the rest of the input controls. Hint! You already have a
-		// HashMap of all the input controls....!!!!
+		
+		txtAnnualReturnWorking.clear();
+		txtAnnualReturnWorking.setDisable(false);
+	
+		txtYearsRetired.clear();
+		txtYearsRetired.setDisable(false);
+		
+		txtAnnualReturnRetired.clear();
+		txtAnnualReturnRetired.setDisable(false);
+		
+		txtRequiredIncome.clear();
+		txtRequiredIncome.setDisable(false);
+	
+		txtMonthlySSI.clear();
+		txtMonthlySSI.setDisable(false);
 	}
 
 	@FXML
@@ -127,9 +137,22 @@ public class RetirementController implements Initializable {
 
 		txtSaveEachMonth.setDisable(false);
 		txtWhatYouNeedToSave.setDisable(false);
+		
+		int iYearsToWork = Integer.parseInt(txtYearsToWork.getText());
+		double dAnnualReturnWorking = Double.parseDouble(txtAnnualReturnWorking.getText());
+		int iYearsRetired = Integer.parseInt(txtYearsRetired.getText());
+		double dAnnualReturnRetired = Double.parseDouble(txtAnnualReturnRetired.getText());
+		double dRequiredIncome = Double.parseDouble(txtRequiredIncome.getText());
+		double dMonthlySSI = Double.parseDouble(txtMonthlySSI.getText());
+		
+		Retirement r = new Retirement(iYearsToWork, dAnnualReturnWorking, iYearsRetired, dAnnualReturnRetired,
+				dRequiredIncome, dMonthlySSI);
+		
+		double WhatYouNeedToSave = r.TotalAmountToSave();
+		double SaveEachMonth = r.MonthlySavings();
+		
+		txtWhatYouNeedToSave.setText(String.valueOf(WhatYouNeedToSave));
+		txtSaveEachMonth.setText(String.valueOf(SaveEachMonth));
 
-		// TODO: Calculate txtWhatYouNeedToSave value...
-		// TODO: Then calculate txtSaveEachMonth, using amount from txtWhatYouNeedToSave
-		// as input
 	}
 }
